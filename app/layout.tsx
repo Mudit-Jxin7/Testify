@@ -22,7 +22,9 @@ export default function RootLayout({
   return (
     <QueryClientProvider client={queryClient}>
       <html lang="en">
-        <body className={poppins.className}>
+        <body
+          className={`${poppins.className} bg-gradient-to-r from-blue-100 via-indigo-50 to-purple-50`}
+        >
           {children}
           <Toaster />
         </body>
