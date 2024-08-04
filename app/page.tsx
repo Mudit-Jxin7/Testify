@@ -1,10 +1,22 @@
+"use client";
 import Image from "next/image";
 
 import OverviewCard from "@/components/overviewCard";
 import logo from "@/public/logo.svg";
 import { Button } from "@/components/ui/button";
+import { useGetSpacesQuery } from "@/hooks/useSpaceQuery";
 
 export default function Home() {
+  const { data, isLoading, isError } = useGetSpacesQuery();
+
+  {
+    isLoading && <p>Loading...</p>;
+  }
+
+  {
+    isError && <p>Something went wrong</p>;
+  }
+
   return (
     <div className="h-full p-10 flex flex-col gap-10">
       <div className="flex flex-row gap-2">
@@ -29,6 +41,13 @@ export default function Home() {
             Create a new space
           </Button>
         </div>
+        {data && (
+          <div>
+            {data.spaces.map((space: any) => (
+              <div key={space.id}>{space.name}</div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

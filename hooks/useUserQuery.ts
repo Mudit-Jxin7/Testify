@@ -2,9 +2,10 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 import axios from "axios";
-import { toast } from "@/components/ui/use-toast";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+
+import { toast } from "@/components/ui/use-toast";
 
 const loginUser = async (data: TLoginUser) => {
   const res = await axios.post(`http://localhost:3000/api/auth/login`, {
