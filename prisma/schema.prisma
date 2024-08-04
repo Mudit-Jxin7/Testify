@@ -8,8 +8,29 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   name     String
-  email    String @unique
+  email    String  @unique
   password String
+  spaces   Space[] // A user can have multiple spaces
+}
+
+model Space {
+  id           Int           @id @default(autoincrement())
+  name         String
+  userId       Int
+  user         User          @relation(fields: [userId], references: [id])
+  testimonials Testimonial[] 
+}
+
+model Testimonial {
+  id           Int      @id @default(autoincrement())
+  customerName String
+  photo        String
+  testimonial  String
+  stars        Int
+  liked        Boolean
+  createdAt    DateTime @default(now())
+  spaceId      Int
+  space        Space    @relation(fields: [spaceId], references: [id])
 }
