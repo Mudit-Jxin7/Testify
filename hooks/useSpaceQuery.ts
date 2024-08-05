@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
@@ -18,9 +18,11 @@ const createSpace = async (data: { name: string }) => {
 
 export const useCreateSpaceMutation = () => {
     const router = useRouter();
+    const queryClient = useQueryClient();
     return useMutation({
         mutationFn: createSpace,
         onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["spaces"] });
             toast({
                 title: `Space Created Successfully`,
                 variant: "default",

@@ -1,21 +1,34 @@
 "use client";
+import { useState } from "react";
 import Image from "next/image";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import OverviewCard from "@/components/overviewCard";
 import logo from "@/public/logo.svg";
 import { Button } from "@/components/ui/button";
-import { useGetSpacesQuery } from "@/hooks/useSpaceQuery";
+import {
+  useGetSpacesQuery,
+  useCreateSpaceMutation,
+} from "@/hooks/useSpaceQuery";
+import { Input } from "@/components/ui/input";
 
 export default function Home() {
   const { data, isLoading, isError } = useGetSpacesQuery();
+  const { mutate } = useCreateSpaceMutation();
+  const [spaceName, setSpaceName] = useState("");
 
-  {
-    isLoading && <p>Loading...</p>;
-  }
-
-  {
-    isError && <p>Something went wrong</p>;
-  }
+  const handleCreateSpace = () => {
+    if (!spaceName) return;
+    mutate({ name: spaceName });
+    setSpaceName("");
+  };
 
   return (
     <div className="h-full p-10 flex flex-col gap-10">
@@ -34,17 +47,51 @@ export default function Home() {
       <div className="flex flex-col gap-4 px-48">
         <div className="flex flex-row justify-between">
           <h2 className="font-medium text-3xl text-gray-800">Spaces</h2>
-          <Button
-            className="bg-purple-500 text-white py-2 rounded-md hover:bg-purple-600 transition-colors"
-            size={"lg"}
-          >
-            Create a new space
-          </Button>
+          <Dialog>
+            <DialogTrigger>
+              <Button
+                className="bg-purple-500 text-white py-2 rounded-md hover:bg-purple-600 transition-colors"
+                size={"lg"}
+              >
+                Create a new space
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create a New Space</DialogTitle>
+                <DialogDescription>
+                  Please enter the name for your new space.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex flex-col gap-4">
+                <Input
+                  type="text"
+                  className="border rounded-md p-2"
+                  placeholder="Enter space name"
+                  value={spaceName}
+                  onChange={(e) => setSpaceName(e.target.value)}
+                />
+                <Button
+                  className="bg-purple-500 text-white py-2 rounded-md hover:bg-purple-600 transition-colors"
+                  onClick={handleCreateSpace}
+                >
+                  Create
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
+        {isLoading && <p>Loading...</p>}
+        {isError && <p>Something went wrong</p>}
         {data && (
-          <div>
+          <div className="flex flex-wrap gap-10 flex-row mt-4">
             {data.spaces.map((space: any) => (
-              <div key={space.id}>{space.name}</div>
+              <div
+                className="cursor-pointer flex flex-row border-2 rounded-lg border-gray-300 bg-white shadow-sm p-4 gap-8 items-center hover:scale-105 transition-all"
+                key={space.id}
+              >
+                {space.name}
+              </div>
             ))}
           </div>
         )}
