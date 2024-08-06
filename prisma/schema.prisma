@@ -21,11 +21,15 @@ model Space {
   userId       Int
   user         User          @relation(fields: [userId], references: [id])
   testimonials Testimonial[] 
+  header       String
+  message      String 
+  isCreated    Boolean       @default(false)       
 }
 
 model Testimonial {
   id           Int      @id @default(autoincrement())
   customerName String
+  email        String
   photo        String
   testimonial  String
   stars        Int
