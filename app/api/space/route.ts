@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
-import { authenticateToken } from "@/helper/auth"; 
+import { authenticateToken } from "@/helper/auth";
 
 const prisma = new PrismaClient();
 
@@ -8,9 +8,16 @@ export async function POST(request: NextRequest) {
     try {
         const decoded = await authenticateToken(request);
         //@ts-ignore
-        if (decoded.error) return decoded;
+        if (decoded.error) return NextResponse.json(decoded, { status: 401 });
 
-        const { name } = await request.json();
+        let parsedBody;
+        try {
+            parsedBody = await request.json();
+        } catch (error) {
+            return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+        }
+
+        const { name, header, message } = parsedBody;
 
         if (!name) {
             return NextResponse.json({ error: "Name is required" }, { status: 400 });
@@ -19,6 +26,8 @@ export async function POST(request: NextRequest) {
         const space = await prisma.space.create({
             data: {
                 name,
+                header: header || "",
+                message: message || "",
                 //@ts-ignore
                 userId: decoded.userId,
             },
@@ -29,10 +38,7 @@ export async function POST(request: NextRequest) {
             { status: 201 },
         );
     } catch (error) {
-        return NextResponse.json(
-            { error: "Failed to create space" },
-            { status: 500 },
-        );
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
 
@@ -40,7 +46,7 @@ export async function GET(request: NextRequest) {
     try {
         const decoded = await authenticateToken(request);
         //@ts-ignore
-        if (decoded.error) return decoded;
+        if (decoded.error) return NextResponse.json(decoded, { status: 401 });
 
         const spaces = await prisma.space.findMany({
             //@ts-ignore
@@ -60,9 +66,16 @@ export async function PUT(request: NextRequest) {
     try {
         const decoded = await authenticateToken(request);
         //@ts-ignore
-        if (decoded.error) return decoded;
+        if (decoded.error) return NextResponse.json(decoded, { status: 401 });
 
-        const { id, name } = await request.json();
+        let parsedBody;
+        try {
+            parsedBody = await request.json();
+        } catch (error) {
+            return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+        }
+
+        const { id, name } = parsedBody;
 
         if (!id || !name) {
             return NextResponse.json(
@@ -96,9 +109,16 @@ export async function DELETE(request: NextRequest) {
     try {
         const decoded = await authenticateToken(request);
         //@ts-ignore
-        if (decoded.error) return decoded;
+        if (decoded.error) return NextResponse.json(decoded, { status: 401 });
 
-        const { id } = await request.json();
+        let parsedBody;
+        try {
+            parsedBody = await request.json();
+        } catch (error) {
+            return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+        }
+
+        const { id } = parsedBody;
 
         if (!id) {
             return NextResponse.json({ error: "ID is required" }, { status: 400 });
