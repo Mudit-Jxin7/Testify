@@ -1,7 +1,11 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
+import {
+  useGetSpaceByNameQuery,
+  useUpdateSpaceQuery,
+} from "@/hooks/useSpaceQuery";
 
 import logo from "@/public/logo.svg";
 import Navbar from "@/components/navbar";
@@ -24,13 +28,29 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useGetSpaceByNameQuery } from "@/hooks/useSpaceQuery";
 
-const page = () => {
+const Page = () => {
   const { id } = useParams();
   const { data, isLoading } = useGetSpaceByNameQuery(id);
+  const { mutate: updateSpace } = useUpdateSpaceQuery();
+
+  const [header, setHeader] = useState("");
+  const [message, setMessage] = useState("");
 
   if (isLoading) return <div>Loading...</div>;
+
+  const handleUpdateSpace = () => {
+    if (!header || !message) {
+      return;
+    }
+
+    updateSpace({
+      id: data?.space?.id,
+      name: data?.space?.name,
+      header,
+      message,
+    });
+  };
 
   return (
     <div className="h-full p-10 flex flex-col gap-10">
@@ -41,7 +61,8 @@ const page = () => {
         <div className="flex flex-col">
           <h1 className="text-2xl">Name: {data?.space?.name}</h1>
           <p className="text-md">
-            Space Public URL : <span>www.localhost:3000.com</span>
+            Space Public URL :{" "}
+            <span>{`$www.localhost:3000.com/testimonial/${data?.space?.name}`}</span>
           </p>
         </div>
       </div>
@@ -60,7 +81,7 @@ const page = () => {
               </p>
             </DialogTrigger>
             <DialogContent>
-              <Card>
+              <Card className="m-4">
                 <CardHeader>
                   <CardTitle>{data?.space?.name}</CardTitle>
                   <CardDescription>
@@ -71,7 +92,7 @@ const page = () => {
                 </CardHeader>
                 <CardContent>
                   {data?.space?.isCreated
-                    ? data?.space?.description
+                    ? data?.space?.message
                     : "Space Description"}
                 </CardContent>
                 <CardContent>
@@ -116,15 +137,24 @@ const page = () => {
                 <div className="flex flex-col gap-4">
                   <Input
                     type="text"
+                    required
+                    value={header}
+                    onChange={(e) => setHeader(e.target.value)}
                     className="border rounded-md p-2"
-                    placeholder="Enter Header Name..."
+                    placeholder="Enter Header..."
                   />
                   <Input
                     type="text"
+                    required
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                     className="border rounded-md p-2"
-                    placeholder="Enter Header Message..."
+                    placeholder="Enter Description..."
                   />
-                  <Button className="bg-purple-500 text-white py-2 rounded-md hover:bg-purple-600 transition-colors">
+                  <Button
+                    onClick={handleUpdateSpace}
+                    className="bg-purple-500 text-white py-2 rounded-md hover:bg-purple-600 transition-colors"
+                  >
                     Create
                   </Button>
                 </div>
@@ -160,4 +190,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

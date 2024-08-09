@@ -54,7 +54,7 @@ export const useGetSpacesQuery = () => {
         queryKey: ["spaces"],
         queryFn: getSpaces,
         //@ts-ignore
-        onError: (error: { message: any; }) => {
+        onError: (error: { message: any }) => {
             toast({
                 title: `Something went wrong, please try later !!`,
                 description: error.message,
@@ -80,7 +80,7 @@ export const useGetSpaceByNameQuery = (spaceName: any) => {
         queryKey: ["spaces"],
         queryFn: () => getSpaceByName(spaceName),
         //@ts-ignore
-        onError: (error: { message: any; }) => {
+        onError: (error: { message: any }) => {
             toast({
                 title: `Something went wrong, please try later !!`,
                 description: error.message,
@@ -89,3 +89,55 @@ export const useGetSpaceByNameQuery = (spaceName: any) => {
         },
     });
 };
+
+const updateSpace = async ({
+    id,
+    name,
+    header,
+    message,
+}: {
+    id: string;
+    name: string;
+    header: string;
+    message: string;
+}) => {
+    const token = Cookies.get("token");
+    const res = await axios.put(
+        `http://localhost:3000/api/createSpace`,
+        {
+            id,
+            name,
+            header,
+            message,
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    );
+    return res.data;
+};
+
+export const useUpdateSpaceQuery = () => {
+    const router = useRouter();
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: updateSpace,
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["spaces"] });
+            toast({
+                title: `Space Created Successfully`,
+                variant: "default",
+            });
+        },
+        onError: (error) => {
+            toast({
+                title: `Something went wrong, please try later !!`,
+                description: error.message,
+                variant: "destructive",
+            });
+        },
+    });
+};
+

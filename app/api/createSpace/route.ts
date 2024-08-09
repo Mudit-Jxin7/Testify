@@ -12,9 +12,9 @@ export async function PUT(request: NextRequest) {
 
         const { id, name, header, message } = await request.json();
 
-        if (!id || !name) {
+        if (!id || !name || !header || !message) {
             return NextResponse.json(
-                { error: "Space ID and name are required" },
+                { error: "information missing" },
                 { status: 400 },
             );
         }
