@@ -63,3 +63,29 @@ export const useGetSpacesQuery = () => {
         },
     });
 };
+
+const getSpaceByName = async (spaceName: any) => {
+    const token = Cookies.get("token");
+
+    const res = await axios.get(`http://localhost:3000/api/space/${spaceName}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    return res.data;
+};
+
+export const useGetSpaceByNameQuery = (spaceName: any) => {
+    return useQuery({
+        queryKey: ["spaces"],
+        queryFn: () => getSpaceByName(spaceName),
+        //@ts-ignore
+        onError: (error: { message: any; }) => {
+            toast({
+                title: `Something went wrong, please try later !!`,
+                description: error.message,
+                variant: "destructive",
+            });
+        },
+    });
+};
