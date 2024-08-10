@@ -28,6 +28,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import Link from "next/link";
 
 const Page = () => {
   const { id } = useParams();
@@ -62,7 +63,9 @@ const Page = () => {
           <h1 className="text-2xl">Name: {data?.space?.name}</h1>
           <p className="text-md">
             Space Public URL :{" "}
-            <span>{`$www.localhost:3000.com/testimonial/${data?.space?.name}`}</span>
+            <Link
+              href={`www.localhost:3000.com/testimonial/${data?.space?.name}`}
+            >{`www.localhost:3000.com/testimonial/${data?.space?.name}`}</Link>
           </p>
         </div>
       </div>
@@ -82,9 +85,11 @@ const Page = () => {
             </DialogTrigger>
             <DialogContent>
               <Card className="m-4">
-                <CardHeader>
-                  <CardTitle>{data?.space?.name}</CardTitle>
-                  <CardDescription>
+                <CardHeader className="text-center uppercase gap-4">
+                  <CardTitle className="text-3xl">
+                    {data?.space?.name}
+                  </CardTitle>
+                  <CardDescription className="text-xl">
                     {data?.space?.isCreated
                       ? data?.space?.header
                       : "Space Header"}
@@ -96,8 +101,9 @@ const Page = () => {
                     : "Space Description"}
                 </CardContent>
                 <CardContent>
-                  <p>Questions</p>
-                  <ul className="list-disc pl-5">
+                  <p className="text-lg uppercase">Questions</p>
+                  <div className="w-10 bg-violet-700 h-1 my-2"></div>
+                  <ul className="list-disc pl-5 text-slate-600 text-sm">
                     <li>Who are you / What you are working on?</li>
                     <li>How has [our product / service] helped you?</li>
                     <li>

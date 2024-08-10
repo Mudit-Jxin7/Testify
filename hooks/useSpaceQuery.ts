@@ -127,7 +127,7 @@ export const useUpdateSpaceQuery = () => {
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ["spaces"] });
             toast({
-                title: `Space Created Successfully`,
+                title: `Space Updated Successfully`,
                 variant: "default",
             });
         },
