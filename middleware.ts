@@ -14,7 +14,5 @@ export const config = {
         "/",
         "/space",
         "/space/:id",
-        "/testimonial",
-        "/testimonial/:id",
     ],
 };
