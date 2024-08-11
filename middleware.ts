@@ -12,5 +12,9 @@ export async function middleware(req: NextRequest, res: NextResponse) {
 export const config = {
     matcher: [
         "/",
+        "/space",
+        "/space/:id",
+        "/testimonial",
+        "/testimonial/:id",
     ],
 };

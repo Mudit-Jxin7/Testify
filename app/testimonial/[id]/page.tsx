@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import Image from "next/image";
 import { useParams } from "next/navigation";
 
 import Navbar from "@/components/navbar";
@@ -9,7 +8,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -22,11 +20,21 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Star } from "@phosphor-icons/react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const Page = () => {
   const { id } = useParams();
+  const [rating, setRating] = useState(0);
 
   const { data, isLoading } = useGetSpaceByNameQuery(id);
+
+  const handleClick = (index: number) => {
+    setRating(index + 1 === rating ? 0 : index + 1);
+  };
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -64,11 +72,68 @@ const Page = () => {
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Create a New Space</DialogTitle>
-            <DialogDescription>
-              Please enter the name for your new space.
+            <DialogTitle>Write testimonial to</DialogTitle>
+            <DialogDescription className="mt-8">
+              <p className="text-md uppercase">Questions</p>
+              <div className="w-10 bg-violet-700 h-1 my-2"></div>
+              <ul className="list-disc pl-5 text-slate-600 text-sm">
+                <li>Who are you / What you are working on?</li>
+                <li>How has [our product / service] helped you?</li>
+                <li>What is the best thing about [our product / service]?</li>
+              </ul>
             </DialogDescription>
           </DialogHeader>
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-row gap-2">
+              {[...Array(5)].map((_, index) => (
+                <Star
+                  key={index}
+                  size={20}
+                  onClick={() => handleClick(index)}
+                  className={
+                    index < rating ? "text-yellow-500" : "text-gray-400"
+                  }
+                />
+              ))}
+            </div>
+            <Textarea
+              className="border rounded-none border-slate-500"
+              placeholder="Write your Review"
+            />
+            <Input
+              className="border rounded-none border-slate-500"
+              placeholder="Your Email"
+            />
+            <Input
+              className="border rounded-none border-slate-500"
+              placeholder="Your Name"
+            />
+            <p>Upload Your Photo</p>
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <div className="items-top flex space-x-2 mt-2">
+              <Checkbox id="terms1" />
+              <div className="grid gap-1.5 leading-none">
+                <label
+                  htmlFor="terms1"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Accept terms and conditions
+                </label>
+                <p className="text-sm text-muted-foreground">
+                  You agree to our Terms of Service and Privacy Policy.
+                </p>
+              </div>
+            </div>
+            <Button
+              className="bg-purple-500 text-white py-2 rounded-md hover:bg-purple-600 transition-colors"
+              size={"lg"}
+            >
+              Send
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
