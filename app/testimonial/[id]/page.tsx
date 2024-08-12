@@ -1,15 +1,16 @@
 "use client";
+
 import React, { useState } from "react";
 import { useParams } from "next/navigation";
-
+import { useCreateTestimonialMutation } from "@/hooks/useTestimonialQuery";
 import Navbar from "@/components/navbar";
 import { useGetSpaceByNameQuery } from "@/hooks/useSpaceQuery";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from "@/components/ui/card";
 import {
   Dialog,
@@ -24,21 +25,51 @@ import { Star } from "@phosphor-icons/react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Page = () => {
   const { id } = useParams();
+  const { data, isLoading } = useGetSpaceByNameQuery(id);
+
   const [rating, setRating] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [photo, setPhoto] = useState<string | ArrayBuffer | null>(null);
+  const [email, setEmail] = useState("");
+  const [customerName, setCustomerName] = useState("");
+  const [testimonial, setTestimonial] = useState("");
+  const [spaceId, setSpaceId] = useState<number | null>(null);
 
-  const { data, isLoading } = useGetSpaceByNameQuery(id);
+  const createTestimonialMutation = useCreateTestimonialMutation();
 
   const handleClick = (index: number) => {
     setRating(index + 1 === rating ? 0 : index + 1);
   };
 
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhoto(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = () => {
+    const spaceId = data?.space?.id;
+
+    if (spaceId === null) return;
+
+    createTestimonialMutation.mutate({
+      photo: photo as string,
+      email,
+      customerName,
+      testimonial,
+      stars: rating,
+      spaceId: spaceId,
+      liked: false,
+    });
     setSubmitted(true);
   };
 
@@ -61,7 +92,7 @@ const Page = () => {
           <p className="text-lg uppercase">Questions</p>
           <div className="w-10 bg-violet-700 h-1 my-2"></div>
           <ul className="list-disc pl-5 text-slate-600 text-sm">
-            <li>Who are you / What you are working on?</li>
+            <li>Who are you / What are you working on?</li>
             <li>How has [our product / service] helped you?</li>
             <li>What is the best thing about [our product / service]?</li>
           </ul>
@@ -84,7 +115,7 @@ const Page = () => {
                 <p className="text-md uppercase">Questions</p>
                 <div className="w-10 bg-violet-700 h-1 my-2"></div>
                 <ul className="list-disc pl-5 text-slate-600 text-sm">
-                  <li>Who are you / What you are working on?</li>
+                  <li>Who are you / What are you working on?</li>
                   <li>How has [our product / service] helped you?</li>
                   <li>What is the best thing about [our product / service]?</li>
                 </ul>
@@ -106,20 +137,35 @@ const Page = () => {
               <Textarea
                 className="border rounded-none border-slate-500"
                 placeholder="Write your Review"
+                value={testimonial}
+                onChange={(e) => setTestimonial(e.target.value)}
               />
               <Input
                 className="border rounded-none border-slate-500"
                 placeholder="Your Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <Input
                 className="border rounded-none border-slate-500"
                 placeholder="Your Name"
+                value={customerName}
+                onChange={(e) => setCustomerName(e.target.value)}
               />
-              <p>Upload Your Photo</p>
-              <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+              <div>
+                <p>Upload Your Photo</p>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoChange}
+                />
+                {photo && (
+                  <Avatar>
+                    <AvatarImage src={photo as string} />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                )}
+              </div>
               <div className="items-top flex space-x-2 mt-2">
                 <Checkbox id="terms1" />
                 <div className="grid gap-1.5 leading-none">
