@@ -34,8 +34,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(photo, email, customerName, testimonial, stars, spaceId);
-
     // Check if the space exists
     const space = await prisma.space.findUnique({ where: { id: spaceId } });
     if (!space) {

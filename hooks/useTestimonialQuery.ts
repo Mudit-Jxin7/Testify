@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
@@ -29,6 +29,32 @@ export const useCreateTestimonialMutation = () => {
             });
         },
         onError: (error) => {
+            toast({
+                title: `Something went wrong, please try later !!`,
+                description: error.message,
+                variant: "destructive",
+            });
+        },
+    });
+};
+
+const getTestimonialById = async (spaceId: any) => {
+    const token = Cookies.get("token");
+
+    const res = await axios.get(`http://localhost:3000/api/testimonial/${spaceId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    return res.data;
+};
+
+export const useGetTestimonialByIdQuery = (spaceId: any) => {
+    return useQuery({
+        queryKey: ["testimonials"],
+        queryFn: () => getTestimonialById(spaceId),
+        //@ts-ignore
+        onError: (error: { message: any }) => {
             toast({
                 title: `Something went wrong, please try later !!`,
                 description: error.message,

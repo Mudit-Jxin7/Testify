@@ -6,6 +6,7 @@ import {
   useGetSpaceByNameQuery,
   useUpdateSpaceQuery,
 } from "@/hooks/useSpaceQuery";
+import { useGetTestimonialByIdQuery } from "@/hooks/useTestimonialQuery";
 
 import logo from "@/public/logo.svg";
 import Navbar from "@/components/navbar";
@@ -16,7 +17,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -29,11 +29,17 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Heart, Star } from "@phosphor-icons/react";
 
 const Page = () => {
   const { id } = useParams();
   const { data, isLoading } = useGetSpaceByNameQuery(id);
   const { mutate: updateSpace } = useUpdateSpaceQuery();
+  const { data: testimonialData, isLoading: testimonialDataLoading } =
+    useGetTestimonialByIdQuery(data?.space?.id);
+
+  console.log(testimonialData);
 
   const [header, setHeader] = useState("");
   const [message, setMessage] = useState("");
@@ -178,18 +184,58 @@ const Page = () => {
               Options
             </Button>{" "}
           </div>
-          <Card>
-            <CardHeader>
-              <CardTitle>Card Title</CardTitle>
-              <CardDescription>Card Description</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Card Content</p>
-            </CardContent>
-            <CardFooter>
-              <p>Card Footer</p>
-            </CardFooter>
-          </Card>
+          {testimonialDataLoading && <div>Loading...</div>}
+          {testimonialData?.testimonials?.map((testimonial: any) => (
+            <Card
+              key={testimonial?.id}
+              className="flex flex-col gap-6 p-6 bg-white shadow-lg rounded-lg border border-gray-200"
+            >
+              <div className="flex flex-row justify-between items-center">
+                <Badge
+                  variant={"outline"}
+                  className="w-24 justify-center mt-3 p-2 text-indigo-600 bg-indigo-50 border border-indigo-200 rounded-lg"
+                >
+                  Text
+                </Badge>
+                <div className="flex flex-row gap-3">
+                  <Heart
+                    size={24}
+                    className="text-red-500 cursor-pointer hover:text-red-600"
+                  />
+                  <Star
+                    size={24}
+                    className="text-yellow-400 cursor-pointer hover:text-yellow-500"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-1">
+                {Array.from({ length: testimonial?.stars }, (_, index) => (
+                  <Star key={index} size={24} className="text-yellow-400" />
+                ))}
+              </div>
+
+              <p className="text-gray-700 text-lg leading-relaxed">
+                {testimonial?.testimonial}
+              </p>
+
+              <div className="flex flex-row justify-between items-center text-gray-500">
+                <div className="flex flex-col gap-1">
+                  <p className="font-semibold">Name</p>
+                  <p>{testimonial?.customerName}</p>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <p className="font-semibold">Email</p>
+                  <p>{testimonial?.email}</p>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1 text-gray-500">
+                <p className="font-semibold">Submitted At</p>
+                <p>{new Date(testimonial?.createdAt).toLocaleString()}</p>
+              </div>
+            </Card>
+          ))}
         </div>
       </div>
     </div>
