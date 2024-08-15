@@ -41,11 +41,14 @@ export const useCreateTestimonialMutation = () => {
 const getTestimonialById = async (spaceId: any) => {
     const token = Cookies.get("token");
 
-    const res = await axios.get(`http://localhost:3000/api/testimonial/${spaceId}`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
+    const res = await axios.get(
+        `http://localhost:3000/api/testimonial/${spaceId}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         },
-    });
+    );
     return res.data;
 };
 
@@ -55,6 +58,38 @@ export const useGetTestimonialByIdQuery = (spaceId: any) => {
         queryFn: () => getTestimonialById(spaceId),
         //@ts-ignore
         onError: (error: { message: any }) => {
+            toast({
+                title: `Something went wrong, please try later !!`,
+                description: error.message,
+                variant: "destructive",
+            });
+        },
+    });
+};
+
+const likeTestimonial = async (id: any) => {
+    const token = Cookies.get("token");
+    const res = await axios.put(`http://localhost:3000/api/like/${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    return res.data;
+};
+
+export const useLikeTestimonialQuery = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: likeTestimonial,
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["testimonials"] });
+
+            toast({
+                title: 'Updated Hall of Fame',
+                variant: "default",
+            });
+        },
+        onError: (error) => {
             toast({
                 title: `Something went wrong, please try later !!`,
                 description: error.message,

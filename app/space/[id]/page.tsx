@@ -6,7 +6,10 @@ import {
   useGetSpaceByNameQuery,
   useUpdateSpaceQuery,
 } from "@/hooks/useSpaceQuery";
-import { useGetTestimonialByIdQuery } from "@/hooks/useTestimonialQuery";
+import {
+  useGetTestimonialByIdQuery,
+  useLikeTestimonialQuery,
+} from "@/hooks/useTestimonialQuery";
 
 import logo from "@/public/logo.svg";
 import Navbar from "@/components/navbar";
@@ -39,7 +42,7 @@ const Page = () => {
   const { data: testimonialData, isLoading: testimonialDataLoading } =
     useGetTestimonialByIdQuery(data?.space?.id);
 
-  console.log(testimonialData);
+  const { mutate: likeTestimonial } = useLikeTestimonialQuery();
 
   const [header, setHeader] = useState("");
   const [message, setMessage] = useState("");
@@ -57,6 +60,10 @@ const Page = () => {
       header,
       message,
     });
+  };
+
+  const handleLikeClick = (testimonialId: number) => {
+    likeTestimonial(testimonialId);
   };
 
   return (
@@ -200,7 +207,10 @@ const Page = () => {
                 <div className="flex flex-row gap-3">
                   <Heart
                     size={24}
-                    className="text-red-500 cursor-pointer hover:text-red-600"
+                    className={`cursor-pointer ${
+                      testimonial?.liked ? "text-red-500" : "text-gray-400"
+                    } hover:text-red-600`}
+                    onClick={() => handleLikeClick(testimonial?.id)}
                   />
                   <Star
                     size={24}
