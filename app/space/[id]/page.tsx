@@ -47,7 +47,7 @@ const Page = () => {
   const [header, setHeader] = useState("");
   const [message, setMessage] = useState("");
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div className="text-center">Loading...</div>;
 
   const handleUpdateSpace = () => {
     if (!header || !message) {
@@ -67,185 +67,205 @@ const Page = () => {
   };
 
   return (
-    <div className="h-full p-10 flex flex-col gap-10">
-      <Navbar />
-      <Separator />
-      <div className="flex flex-row gap-10 items-center px-40">
-        <Image src={logo} alt="logo" />
-        <div className="flex flex-col">
-          <h1 className="text-2xl">Name: {data?.space?.name}</h1>
-          <p className="text-md">
-            Space Public URL :{" "}
-            <Link
-              href={`www.localhost:3000.com/testimonial/${data?.space?.name}`}
-            >{`www.localhost:3000.com/testimonial/${data?.space?.name}`}</Link>
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-50 text-gray-800 font-sans py-8">
+      <div className="px-20 mb-8">
+        <Navbar />
       </div>
       <Separator />
-      <div className="flex flex-row justify-between px-40">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-lg font-medium">INBOX</h2>
-          <p className="text-md font-normal cursor-pointer">All</p>
-          <p className="text-md font-normal cursor-pointer">Texts</p>
-          <p className="text-md font-normal cursor-pointer">Liked</p>
-          <p className="text-md font-normal cursor-pointer">Hall of fame</p>
-          <Dialog>
-            <DialogTrigger>
-              <p className="text-md font-normal text-left cursor-pointer">
-                Preview
-              </p>
-            </DialogTrigger>
-            <DialogContent>
-              <Card className="m-4">
-                <CardHeader className="text-center uppercase gap-4">
-                  <CardTitle className="text-3xl">
-                    {data?.space?.name}
-                  </CardTitle>
-                  <CardDescription className="text-xl">
-                    {data?.space?.isCreated
-                      ? data?.space?.header
-                      : "Space Header"}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {data?.space?.isCreated
-                    ? data?.space?.message
-                    : "Space Description"}
-                </CardContent>
-                <CardContent>
-                  <p className="text-lg uppercase">Questions</p>
-                  <div className="w-10 bg-violet-700 h-1 my-2"></div>
-                  <ul className="list-disc pl-5 text-slate-600 text-sm">
-                    <li>Who are you / What you are working on?</li>
-                    <li>How has [our product / service] helped you?</li>
-                    <li>
-                      What is the best thing about [our product / service]?
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </DialogContent>
-          </Dialog>
-          {data?.space?.isCreated && (
-            <Button
-              className="bg-purple-500 text-white py-2 rounded-md hover:bg-purple-600 transition-colors"
-              size={"sm"}
-              disabled={true}
-            >
-              Create Testimonial
-            </Button>
-          )}
-          {!data?.space?.isCreated && (
+      <div className="flex flex-col gap-10 p-10">
+        <div className="flex flex-row gap-10 items-center px-20">
+          <Image src={logo} alt="logo" className="w-24 h-24" />
+          <div className="flex flex-col">
+            <h1 className="text-4xl font-bold">{data?.space?.name}</h1>
+            <p className="text-lg text-gray-600">
+              Space Public URL :{" "}
+              <Link
+                href={`www.localhost:3000.com/testimonial/${data?.space?.name}`}
+                className="text-blue-600 hover:underline"
+              >{`www.localhost:3000.com/testimonial/${data?.space?.name}`}</Link>
+            </p>
+          </div>
+        </div>
+        <Separator />
+        <div className="flex flex-row justify-between px-20 gap-10">
+          <div className="flex flex-col gap-6 w-1/4">
+            <h2 className="text-2xl font-semibold">INBOX</h2>
+            <p className="text-lg font-medium cursor-pointer hover:text-gray-800">
+              All
+            </p>
+            <p className="text-lg font-medium cursor-pointer hover:text-gray-800">
+              Texts
+            </p>
+            <p className="text-lg font-medium cursor-pointer hover:text-gray-800">
+              Liked
+            </p>
+            <p className="text-lg font-medium cursor-pointer hover:text-gray-800">
+              Hall of fame
+            </p>
             <Dialog>
               <DialogTrigger>
-                <Button
-                  className="bg-purple-500 text-white py-2 rounded-md hover:bg-purple-600 transition-colors"
-                  size={"sm"}
-                >
-                  Create Testimonial
-                </Button>
+                <p className="text-lg font-medium text-left cursor-pointer text-blue-600 hover:underline">
+                  Preview
+                </p>
               </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Create a Testimonial</DialogTitle>
-                  <DialogDescription>
-                    Please fill the details.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="flex flex-col gap-4">
-                  <Input
-                    type="text"
-                    required
-                    value={header}
-                    onChange={(e) => setHeader(e.target.value)}
-                    className="border rounded-md p-2"
-                    placeholder="Enter Header..."
-                  />
-                  <Input
-                    type="text"
-                    required
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    className="border rounded-md p-2"
-                    placeholder="Enter Description..."
-                  />
-                  <Button
-                    onClick={handleUpdateSpace}
-                    className="bg-purple-500 text-white py-2 rounded-md hover:bg-purple-600 transition-colors"
-                  >
-                    Create
-                  </Button>
-                </div>
+              <DialogContent className="bg-white p-6 rounded-lg shadow-lg">
+                <Card className="m-4 p-6 bg-gray-100 rounded-lg shadow">
+                  <CardHeader className="text-center gap-4">
+                    <CardTitle className="text-3xl font-semibold text-gray-700">
+                      {data?.space?.name}
+                    </CardTitle>
+                    <CardDescription className="text-xl text-gray-500">
+                      {data?.space?.isCreated
+                        ? data?.space?.header
+                        : "Space Header"}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="text-lg text-gray-700">
+                    {data?.space?.isCreated
+                      ? data?.space?.message
+                      : "Space Description"}
+                  </CardContent>
+                  <CardContent>
+                    <p className="text-lg font-semibold uppercase">Questions</p>
+                    <div className="w-10 bg-violet-700 h-1 my-2"></div>
+                    <ul className="list-disc pl-5 text-gray-600 text-sm">
+                      <li>Who are you / What are you working on?</li>
+                      <li>How has [our product/service] helped you?</li>
+                      <li>
+                        What is the best thing about [our product/service]?
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
               </DialogContent>
             </Dialog>
-          )}
-        </div>
-        <div className="flex flex-col gap-6 w-3/5">
-          <div className="flex flex-row gap-4">
-            <Input />
-            <Button
-              className="bg-purple-500 text-white py-2 rounded-md hover:bg-purple-600 transition-colors"
-              size={"lg"}
-            >
-              Options
-            </Button>{" "}
+            {data?.space?.isCreated && (
+              <Button
+                className="bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 transition duration-300"
+                size={"sm"}
+                disabled={true}
+              >
+                Create Testimonial
+              </Button>
+            )}
+            {!data?.space?.isCreated && (
+              <Dialog>
+                <DialogTrigger>
+                  <Button
+                    className="bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 transition duration-300"
+                    size={"sm"}
+                  >
+                    Create Testimonial
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle className="text-2xl font-semibold">
+                      Create a Testimonial
+                    </DialogTitle>
+                    <DialogDescription className="text-gray-600">
+                      Please fill the details.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="flex flex-col gap-4">
+                    <Input
+                      type="text"
+                      required
+                      value={header}
+                      onChange={(e) => setHeader(e.target.value)}
+                      className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-purple-600"
+                      placeholder="Enter Header..."
+                    />
+                    <Input
+                      type="text"
+                      required
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      className="border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-purple-600"
+                      placeholder="Enter Description..."
+                    />
+                    <Button
+                      onClick={handleUpdateSpace}
+                      className="bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 transition duration-300"
+                    >
+                      Create
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            )}
           </div>
-          {testimonialDataLoading && <div>Loading...</div>}
-          {testimonialData?.testimonials?.map((testimonial: any) => (
-            <Card
-              key={testimonial?.id}
-              className="flex flex-col gap-6 p-6 bg-white shadow-lg rounded-lg border border-gray-200"
-            >
-              <div className="flex flex-row justify-between items-center">
-                <Badge
-                  variant={"outline"}
-                  className="w-24 justify-center mt-3 p-2 text-indigo-600 bg-indigo-50 border border-indigo-200 rounded-lg"
-                >
-                  Text
-                </Badge>
-                <div className="flex flex-row gap-3">
-                  <Heart
-                    size={24}
-                    className={`cursor-pointer ${
-                      testimonial?.liked ? "text-red-500" : "text-gray-400"
-                    } hover:text-red-600`}
-                    onClick={() => handleLikeClick(testimonial?.id)}
-                  />
-                  <Star
-                    size={24}
-                    className="text-yellow-400 cursor-pointer hover:text-yellow-500"
-                  />
+          <div className="flex flex-col gap-6 w-3/4">
+            <div className="flex flex-row gap-4 items-center">
+              <Input
+                placeholder="Search..."
+                className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-purple-600"
+              />
+              <Button
+                className="bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 transition duration-300"
+                size={"lg"}
+              >
+                Options
+              </Button>
+            </div>
+            {testimonialDataLoading && (
+              <div className="text-center text-gray-500">Loading...</div>
+            )}
+            {testimonialData?.testimonials?.map((testimonial: any) => (
+              <Card
+                key={testimonial?.id}
+                className="p-6 bg-white shadow-lg rounded-lg border border-gray-200 transition hover:shadow-xl"
+              >
+                <div className="flex flex-row justify-between items-center">
+                  <Badge
+                    variant={"outline"}
+                    className="w-24 justify-center mt-3 p-2 text-indigo-600 bg-indigo-50 border border-indigo-200 rounded-lg"
+                  >
+                    Text
+                  </Badge>
+                  <div className="flex flex-row gap-3">
+                    <Heart
+                      size={24}
+                      className={`cursor-pointer ${
+                        testimonial?.liked ? "text-red-500" : "text-gray-400"
+                      } hover:text-red-600 transition`}
+                      onClick={() => handleLikeClick(testimonial?.id)}
+                    />
+                    <Star
+                      size={24}
+                      className="text-yellow-400 cursor-pointer hover:text-yellow-500 transition"
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex gap-1">
-                {Array.from({ length: testimonial?.stars }, (_, index) => (
-                  <Star key={index} size={24} className="text-yellow-400" />
-                ))}
-              </div>
-
-              <p className="text-gray-700 text-lg leading-relaxed">
-                {testimonial?.testimonial}
-              </p>
-
-              <div className="flex flex-row justify-between items-center text-gray-500">
-                <div className="flex flex-col gap-1">
-                  <p className="font-semibold">Name</p>
-                  <p>{testimonial?.customerName}</p>
+                <div className="flex gap-1 my-2">
+                  {Array.from({ length: testimonial?.stars }, (_, index) => (
+                    <Star key={index} size={24} className="text-yellow-400" />
+                  ))}
                 </div>
-                <div className="flex flex-col gap-1">
-                  <p className="font-semibold">Email</p>
-                  <p>{testimonial?.email}</p>
-                </div>
-              </div>
 
-              <div className="flex flex-col gap-1 text-gray-500">
-                <p className="font-semibold">Submitted At</p>
-                <p>{new Date(testimonial?.createdAt).toLocaleString()}</p>
-              </div>
-            </Card>
-          ))}
+                <p className="text-gray-700 text-lg leading-relaxed">
+                  {testimonial?.testimonial}
+                </p>
+
+                <div className="flex flex-row justify-between items-center text-gray-500">
+                  <div className="flex flex-col gap-1">
+                    <p className="font-semibold">Name</p>
+                    <p>{testimonial?.customerName}</p>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <p className="font-semibold">Email</p>
+                    <p>{testimonial?.email}</p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1 text-gray-500 mt-4">
+                  <p className="font-semibold">Submitted At</p>
+                  <p>{new Date(testimonial?.createdAt).toLocaleString()}</p>
+                </div>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
     </div>
