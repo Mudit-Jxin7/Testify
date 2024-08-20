@@ -29,7 +29,7 @@ export const useLoginUserQuery = () => {
     },
     onError: (error) => {
       toast({
-        title: `Something went wrong please try later !!`,
+        title: `Login Failed`,
         description: error.message,
         variant: "destructive",
       });
@@ -59,7 +59,7 @@ export const useRegisterUserQuery = () => {
     },
     onError: (error) => {
       toast({
-        title: `Something went wrong please try later !!`,
+        title: `Registration failed`,
         description: error.message,
         variant: "destructive",
       });

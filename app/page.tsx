@@ -18,6 +18,7 @@ import {
 } from "@/hooks/useSpaceQuery";
 import { Input } from "@/components/ui/input";
 import Navbar from "@/components/navbar";
+import { SkeletonCard } from "@/components/skeletonSm";
 
 export default function Home() {
   const { data, isLoading, isError } = useGetSpacesQuery();
@@ -77,7 +78,18 @@ export default function Home() {
             </DialogContent>
           </Dialog>
         </div>
-        {isLoading && <p className="text-gray-500">Loading...</p>}
+        {isLoading && (
+          <div className="flex flex-wrap gap-5">
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
+        )}
         {isError && <p className="text-red-500">Something went wrong</p>}
         {data && (
           <div className="flex flex-wrap gap-6 mt-4">

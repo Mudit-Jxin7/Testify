@@ -32,10 +32,6 @@ const LoginPage: React.FC = () => {
     mutate(values);
   }
 
-  {
-    isPending && <div>Loading...</div>;
-  }
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-200 via-indigo-100 to-purple-100">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">

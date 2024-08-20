@@ -26,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SkeletonPage } from "@/components/skeletonLg";
 
 const Page = () => {
   const { id } = useParams();
@@ -73,7 +74,7 @@ const Page = () => {
     setSubmitted(true);
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <SkeletonPage />;
 
   return (
     <div className="h-full p-10 flex flex-col gap-10">

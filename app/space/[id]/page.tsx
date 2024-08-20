@@ -34,6 +34,8 @@ import {
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Star } from "@phosphor-icons/react";
+import { SkeletonPage } from "@/components/skeletonLg";
+import { SkeletonCard } from "@/components/skeletonSm";
 
 const Page = () => {
   const { id } = useParams();
@@ -47,7 +49,7 @@ const Page = () => {
   const [header, setHeader] = useState("");
   const [message, setMessage] = useState("");
 
-  if (isLoading) return <div className="text-center">Loading...</div>;
+  if (isLoading) return <SkeletonPage />;
 
   const handleUpdateSpace = () => {
     if (!header || !message) {
@@ -209,7 +211,16 @@ const Page = () => {
               </Button>
             </div>
             {testimonialDataLoading && (
-              <div className="text-center text-gray-500">Loading...</div>
+              <div className="flex flex-wrap gap-5">
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+              </div>
             )}
             {testimonialData?.testimonials?.map((testimonial: any) => (
               <Card
