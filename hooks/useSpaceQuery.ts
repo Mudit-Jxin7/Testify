@@ -3,12 +3,13 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
+import { apiURL } from "@/helper/apiURL";
 import { toast } from "@/components/ui/use-toast";
 
 const createSpace = async (data: { name: string }) => {
     const token = Cookies.get("token");
 
-    const res = await axios.post(`http://localhost:3000/api/space`, data, {
+    const res = await axios.post(`${apiURL}/space`, data, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -41,7 +42,7 @@ export const useCreateSpaceMutation = () => {
 const getSpaces = async () => {
     const token = Cookies.get("token");
 
-    const res = await axios.get(`http://localhost:3000/api/space`, {
+    const res = await axios.get(`${apiURL}/space`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -67,7 +68,7 @@ export const useGetSpacesQuery = () => {
 const getSpaceByName = async (spaceName: any) => {
     const token = Cookies.get("token");
 
-    const res = await axios.get(`http://localhost:3000/api/space/${spaceName}`, {
+    const res = await axios.get(`${apiURL}/space/${spaceName}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -103,7 +104,7 @@ const updateSpace = async ({
 }) => {
     const token = Cookies.get("token");
     const res = await axios.put(
-        `http://localhost:3000/api/createSpace`,
+        `${apiURL}/createSpace`,
         {
             id,
             name,

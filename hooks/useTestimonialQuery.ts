@@ -3,12 +3,13 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
+import { apiURL } from "@/helper/apiURL";
 import { toast } from "@/components/ui/use-toast";
 
 const createTestimonial = async (data: any) => {
     const token = Cookies.get("token");
 
-    const res = await axios.post(`http://localhost:3000/api/testimonial`, data, {
+    const res = await axios.post(`${apiURL}/testimonial`, data, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -42,7 +43,7 @@ const getTestimonialById = async (spaceId: any) => {
     const token = Cookies.get("token");
 
     const res = await axios.get(
-        `http://localhost:3000/api/testimonial/${spaceId}`,
+        `${apiURL}/testimonial/${spaceId}`,
         {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -69,7 +70,7 @@ export const useGetTestimonialByIdQuery = (spaceId: any) => {
 
 const likeTestimonial = async (id: any) => {
     const token = Cookies.get("token");
-    const res = await axios.put(`http://localhost:3000/api/like/${id}`, {
+    const res = await axios.put(`${apiURL}/like/${id}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },

@@ -5,10 +5,11 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
+import { apiURL } from "@/helper/apiURL";
 import { toast } from "@/components/ui/use-toast";
 
 const loginUser = async (data: TLoginUser) => {
-  const res = await axios.post(`http://localhost:3000/api/auth/login`, {
+  const res = await axios.post(`${apiURL}/auth/login`, {
     email: data.email,
     password: data.password,
   });
@@ -38,7 +39,7 @@ export const useLoginUserQuery = () => {
 };
 
 const registerUser = async (data: TRegisterUser) => {
-  const res = await axios.post(`http://localhost:3000/api/auth/register`, {
+  const res = await axios.post(`${apiURL}/auth/register`, {
     name: data.name,
     email: data.email,
     password: data.password,
