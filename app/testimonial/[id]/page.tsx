@@ -38,7 +38,8 @@ const Page = () => {
   const [email, setEmail] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [testimonial, setTestimonial] = useState("");
-  const [spaceId, setSpaceId] = useState<number | null>(null);
+  const [termsChecked, setTermsChecked] = useState(false);
+  const [error, setError] = useState("");
 
   const createTestimonialMutation = useCreateTestimonialMutation();
 
@@ -60,7 +61,12 @@ const Page = () => {
   const handleSubmit = () => {
     const spaceId = data?.space?.id;
 
-    if (spaceId === null) return;
+    if (!termsChecked) {
+      setError("You must accept the terms and conditions.");
+      return;
+    }
+
+    if (!spaceId) return;
 
     createTestimonialMutation.mutate({
       photo: photo as string,
@@ -178,7 +184,13 @@ const Page = () => {
                   )}
                 </div>
                 <div className="flex items-start space-x-2 mt-4">
-                  <Checkbox id="terms1" />
+                  <Checkbox
+                    id="terms1"
+                    checked={termsChecked}
+                    onCheckedChange={(checked) =>
+                      setTermsChecked(checked as boolean)
+                    }
+                  />
                   <div className="leading-none">
                     <label
                       htmlFor="terms1"
@@ -191,6 +203,9 @@ const Page = () => {
                     </p>
                   </div>
                 </div>
+                {error && (
+                  <p className="text-red-500 text-sm text-center">{error}</p>
+                )}
                 <Button
                   className="bg-purple-600 text-white py-3 px-6 rounded-lg hover:bg-purple-700 transition-colors"
                   size={"lg"}
