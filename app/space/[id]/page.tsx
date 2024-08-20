@@ -82,9 +82,9 @@ const Page = () => {
             <p className="text-lg text-gray-600">
               Space Public URL :{" "}
               <Link
-                href={`www.localhost:3000.com/testimonial/${data?.space?.name}`}
+                href={`/testimonial/${data?.space?.name}`}
                 className="text-blue-600 hover:underline"
-              >{`www.localhost:3000.com/testimonial/${data?.space?.name}`}</Link>
+              >{`localhost:3000.com/testimonial/${data?.space?.name}`}</Link>
             </p>
           </div>
         </div>
