@@ -101,9 +101,37 @@ const Page = () => {
             <p className="text-lg font-medium cursor-pointer hover:text-gray-800">
               Liked
             </p>
-            <p className="text-lg font-medium cursor-pointer hover:text-gray-800">
-              Hall of fame
-            </p>
+            <Dialog>
+              <DialogTrigger>
+                <p className="text-lg font-medium text-left cursor-pointer">
+                  Hall Of fame
+                </p>
+              </DialogTrigger>
+              <DialogContent className="bg-white p-6 rounded-lg shadow-lg">
+                <Card className="m-4 p-6 bg-gray-100 rounded-lg shadow">
+                  <CardHeader className="text-center gap-4">
+                    <CardTitle className="text-3xl font-semibold text-gray-700">
+                      Embed Testimonials
+                    </CardTitle>
+                    <CardDescription className="text-xl text-gray-500">
+                      Choose a layout
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-row justify-between">
+                      <p>Masonry Animated</p>
+                      <p>Masonry Fixed</p>
+                      <p>Carousel</p>
+                    </div>
+                  </CardContent>
+                  <CardDescription className="flex justify-center mt-6">
+                    <Button className="bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition duration-300">
+                      Copy Code
+                    </Button>
+                  </CardDescription>
+                </Card>
+              </DialogContent>
+            </Dialog>
             <Dialog>
               <DialogTrigger>
                 <p className="text-lg font-medium text-left cursor-pointer text-blue-600 hover:underline">
